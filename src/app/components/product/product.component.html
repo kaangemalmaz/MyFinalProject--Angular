@@ -1,0 +1,47 @@
+<div *ngIf="dataLoaded==false;" class="spinner-border text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Ürün Ara</label>
+  <input type="text" [(ngModel)]="filterText" class="form-control" id="filterText" placeholder="Aramak istediğiniz ürünü girin">
+</div>
+<!-- [(ngModel)]=> burada çift taraflı yani bu değişirse component değişir.
+[ngModel] => bu tek taraflı direk componentden html e gelir unutma!  -->
+<div *ngIf = "filterText.length>2" class="alert alert-primary">
+  {{filterText}} aradınız
+</div>
+
+<table class="table">
+  <thead *ngIf="dataLoaded==true">
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Unit Price</th>
+      <th>KDV'li Fiyat</th>
+      <th>Units In Stock</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products | filterPipe:filterText">
+      <td>{{product.productId}}</td>
+      <td>{{product.productName | uppercase }}</td> 
+      <td>{{product.categoryId}}</td>
+      <td>{{product.unitPrice | currency }}</td>
+      <td>{{product.unitPrice | vatAdded:18 | currency }}</td>
+      <td>{{product.unitsInStock}}</td>
+      <td><button (click)="addToCart(product)" type="button" class="btn btn-success">Ekle</button></td>
+    </tr>
+</tbody>
+</table>
+
+
+<!-- pipe = boru demek . Gelmiş veriyi daha güzel gösterilmesini sağlar. -->
+<!-- 
+vatAdded:10:20 => 2 parametreli 
+vatAdded | uppercase => iki tane pipe eklemek. 
+
+
+-->
